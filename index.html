@@ -653,7 +653,7 @@ shareBtn.addEventListener('click', async () => {
                 remixBtn.textContent = 'アレンジ中...';
             });
             
-                // アレンジバージョンをシェアボタン
+                 // アレンジバージョンをシェアボタン
 shareRemixBtn.addEventListener('click', async () => {
     const remixedIdea = remixInputEl.value.trim();
     
@@ -701,29 +701,6 @@ shareRemixBtn.addEventListener('click', async () => {
         alert('シェアに失敗しました。もう一度お試しください。');
     }
 });
-                    } else {
-                        // フォールバック：Twitterの意図URLを使用
-                        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-                        window.open(tweetUrl, '_blank', 'width=600,height=400');
-                    }
-                    
-                    // シェア後に感情を更新（フィクション）
-                    updateAppEmotionAfterShare();
-                    
-                    // オプトインしている場合は匿名データを記録
-                    if (state.settings.popularityOptin) {
-                        recordAnonymousShare('remix', remixedIdea);
-                    }
-                    
-                    showShareConfirmation();
-                    
-                    // リミックスモードをリセット
-                    resetRemixMode();
-                } catch (error) {
-                    console.error('シェアに失敗しました:', error);
-                    alert('シェアに失敗しました。もう一度お試しください。');
-                }
-            });
             
             // アレンジキャンセルボタン
             cancelRemixBtn.addEventListener('click', () => {
