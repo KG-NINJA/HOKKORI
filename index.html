@@ -601,106 +601,78 @@
         // イベントリスナーの設定
         function setupEventListeners() {
                 // ほっこりをシェアボタン
-shareBtn.addEventListener('click', async () => {
-    if (state.remixMode) return; // リミックスモードでは通常シェアボタンは無効
-    
-    try {
-        // シェアするテキストを決定
-        let text;
-        if (state.settings.shareIdeaOnly) {
-            text = state.originalIdea;
-        } else {
-            text = `今日のほっこりアイデア：${state.originalIdea}\n\nこれで今日が少しでも明るくなったらシェアしてね！ #今日のほっこり https://kg-ninja.github.io/HOKKORI/`;
-        }
-        
-        // Web Share APIが利用可能かチェック
-        if (navigator.share) {
-            await navigator.share({
-                title: state.settings.shareIdeaOnly ? 'ほっこりアイデア' : '今日のほっこりアイデア',
-                text: text,
-                url: 'https://kg-ninja.github.io/HOKKORI/'
-            });
-        } else {
-            // フォールバック：Twitterの意図URLを使用
+        shareBtn.addEventListener('click', () => {
+            if (state.remixMode) return; // リミックスモードでは通常シェアボタンは無効
+            
+            // シェアするテキストを決定
+            let text;
+            if (state.settings.shareIdeaOnly) {
+                text = state.originalIdea;
+            } else {
+                text = `今日のほっこりアイデア：${state.originalIdea}\n\nこれで今日が少しでも明るくなったらシェアしてね！ #今日のほっこり https://kg-ninja.github.io/HOKKORI/`;
+            }
+            
+            // X（Twitter）専用のシェアリンクを使用
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
             window.open(tweetUrl, '_blank', 'width=600,height=400');
-        }
-        
-        // シェア後に感情を更新（フィクション）
-        updateAppEmotionAfterShare();
-        
-        // オプトインしている場合は匿名データを記録（実際の実装ではここでサーバーに送信など）
-        if (state.settings.popularityOptin) {
-            recordAnonymousShare('original');
-        }
-        
-        showShareConfirmation();
-    } catch (error) {
-        console.error('シェアに失敗しました:', error);
-        alert('シェアに失敗しました。もう一度お試しください。');
-    }
-});
             
-            // アイデアをアレンジボタン
-            remixBtn.addEventListener('click', () => {
-                state.remixMode = true;
-                remixSectionEl.style.display = 'block';
-                remixInputEl.value = state.originalIdea; // 元のアイデアをベースにする
-                remixInputEl.focus();
+            // シェア後に感情を更新（フィクション）
+            updateAppEmotionAfterShare();
+            
+            // オプトインしている場合は匿名データを記録（実際の実装ではここでサーバーに送信など）
+            if (state.settings.popularityOptin) {
+                recordAnonymousShare('original');
+            }
+            
+            showShareConfirmation();
+        });
                 
-                // ボタンの状態を更新
-                remixBtn.disabled = true;
-                remixBtn.textContent = 'アレンジ中...';
-            });
-            
+                // アイデアをアレンジボタン
+                remixBtn.addEventListener('click', () => {
+                    state.remixMode = true;
+                    remixSectionEl.style.display = 'block';
+                    remixInputEl.value = state.originalIdea; // 元のアイデアをベースにする
+                    remixInputEl.focus();
+                    
+                    // ボタンの状態を更新
+                    remixBtn.disabled = true;
+                    remixBtn.textContent = 'アレンジ中...';
+                });
+                
                  // アレンジバージョンをシェアボタン
-shareRemixBtn.addEventListener('click', async () => {
-    const remixedIdea = remixInputEl.value.trim();
-    
-    if (!remixedIdea) {
-        alert('アイデアを入力してください。');
-        return;
-    }
-    
-    // Determine share text based on setting
-    let text;
-    if (state.settings.shareIdeaOnly) {
-        text = remixedIdea;
-    } else {
-        text = `私のほっこりアイデアアレンジ：${remixedIdea}\n\n元のアイデア：「${state.originalIdea}」\n\nよかったらみんなもアレンジしてシェアしてね！ #ほっこりアレンジ https://kg-ninja.github.io/HOKKORI/`;
-    }
-    
-    try {
-        // Web Share APIが利用可能かチェック
-        if (navigator.share) {
-            await navigator.share({
-                title: state.settings.shareIdeaOnly ? 'ほっこりアイデア' : '私のほっこりアイデアアレンジ',
-                text: text,
-                url: 'https://kg-ninja.github.io/HOKKORI/'
-            });
-        } else {
-            // フォールバック：Twitterの意図URLを使用
+        shareRemixBtn.addEventListener('click', () => {
+            const remixedIdea = remixInputEl.value.trim();
+            
+            if (!remixedIdea) {
+                alert('アイデアを入力してください。');
+                return;
+            }
+            
+            // Determine share text based on setting
+            let text;
+            if (state.settings.shareIdeaOnly) {
+                text = remixedIdea;
+            } else {
+                text = `私のほっこりアイデアアレンジ：${remixedIdea}\n\n元のアイデア：「${state.originalIdea}」\n\nよかったらみんなもアレンジしてシェアしてね！ #ほっこりアレンジ https://kg-ninja.github.io/HOKKORI/`;
+            }
+            
+            // X（Twitter）専用のシェアリンクを使用
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
             window.open(tweetUrl, '_blank', 'width=600,height=400');
-        }
-        
-        // シェア後に感情を更新（フィクション）
-        updateAppEmotionAfterShare();
-        
-        // オプトインしている場合は匿名データを記録
-        if (state.settings.popularityOptin) {
-            recordAnonymousShare('remix', remixedIdea);
-        }
-        
-        showShareConfirmation();
-        
-        // リミックスモードをリセット
-        resetRemixMode();
-    } catch (error) {
-        console.error('シェアに失敗しました:', error);
-        alert('シェアに失敗しました。もう一度お試しください。');
-    }
-});
+            
+            // シェア後に感情を更新（フィクション）
+            updateAppEmotionAfterShare();
+            
+            // オプトインしている場合は匿名データを記録
+            if (state.settings.popularityOptin) {
+                recordAnonymousShare('remix', remixedIdea);
+            }
+            
+            showShareConfirmation();
+            
+            // リミックスモードをリセット
+            resetRemixMode();
+        });
             
             // アレンジキャンセルボタン
             cancelRemixBtn.addEventListener('click', () => {
