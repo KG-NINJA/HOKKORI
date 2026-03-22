@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日のほっこり - 毎日を明るくするアイデア</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .idea-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .idea-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+        }
+        
+        .idea-text {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            line-height: 1.8;
+        }
+        
+        .idea-date {
+            display: block;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        .app-emotion {
+            text-align: center;
+            margin: 25px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+        }
+        
+        .btn-secondary {
+            background: #4ecdc4;
+            color: white;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            background: #3dc1b5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.5);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: #666;
+            border: 2px solid #ddd;
+            color: #666;
+        }
+        
+        .btn-outline:hover {
+            background: #f8f9fa;
+            border-color: #bbb;
+        }
+        
+        .remix-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            border-left: 4px solid #ff9aa2;
+        }
+        
+        .remix-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .remix-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .remix-input:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+        }
+        
+        .privacy-info {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close-modal:hover {
+            color: #000;
+        }
+        
+        .settings-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        
+        .settings-label {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #4ecdc4;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .idea-text {
+                font-size: 1.2rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>今日のほっこり</h1>
+            <p>毎日を明るくする小さなアイデア</p>
+        </div>
+        
+        <div id="idea-card" class="idea-card">
+            <div class="idea-date" id="idea-date">本日のほっこりアイデア</div>
+            <div class="idea-text" id="idea-text">アイデアを読み込み中...</div>
+        </div>
+        
+        <div class="app-emotion" id="app-emotion">
+            <span class="emoji" id="emoji">☀️</span>
+            <span id="emotion-text">今日もよろしくね！</span>
+        </div>
+        
+        <div class="buttons">
+            <button id="share-btn" class="btn btn-primary">
+                <span class="emoji">📤</span> ほっこりをシェア
+            </button>
+            <button id="remix-btn" class="btn btn-secondary">
+                <span class="emoji">🔄</span> アイデアをアレンジ
+            </button>
+            <button id="settings-btn" class="btn btn-outline">
+                <span class="emoji">⚙️</span> 設定
+            </button>
+        </div>
+        
+        <div id="remix-section" class="remix-section" style="display: none;">
+            <h3>💡 あなたのほっこりアイデアを作ろう</h3>
+            <p>今日のアイデアを参考に、あなたなりのアレンジを加えてみてください：</p>
+            <textarea id="remix-input" class="remix-input" placeholder="ここであなたのほっこりアイデアを書いてみよう...">
+</textarea>
+            <div class="buttons">
+                <button id="share-remix-btn" class="btn btn-primary">
+                    <span class="emoji">📤</span> アレンジバージョンをシェア
+                </button>
+                <button id="cancel-remix-btn" class="btn btn-outline">
+                    キャンセル
+                </button>
+            </div>
+            <div class="privacy-info">
+                ※ アレンジしたアイデアはシェアするまで何も保存されません。<br>
+                シェアするときのみ、Twitter/Xに投稿されます。
+            </div>
+        </div>
+        
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>設定</h2>
+                <p>以下の機能をオン/オフできます。すべての機能はあなたの明示的な許可に基づいて動作します。</p>
+                
+                <div class="settings-toggle">
+                    <span class="settings-label">人気ランキングに参加（匿名データ提供）</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="popularity-optin">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="settings-toggle">
+                    <span class="settings-label">人気バリエーションを表示</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="show-popular">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="settings-toggle">
+                    <span class="settings-label">アイデアの系譜を表示</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="show-lineage">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="settings-toggle">
+                    <span class="settings-label">アプリの「感情」表示（フィクション）</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="show-emotion" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="privacy-info" style="margin-top: 20px;">
+                    <strong>プライバシーについて</strong><br>
+                    ・個人を特定できるデータは一切収集しません<br>
+                    ・オプトインした機能のみが匿名データを収集します<br>
+                    ・データは売買・広告目的に使用しません<br>
+                    ・すべての共有はあなたの明確なアクションが必要です
+                </div>
+                
+                <button id="close-settings" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                    設定を閉じる
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="privacy-info">
+        このアプリはユーザーの明示的許可に基づいてのみ動作します。<br>
+        自動投稿・自動データ収集は一切行いません。<br>
+        <a href="#" id="privacy-link">プライバシーポリシー詳細</a>
+    </div>
+    
+    <div class="footer">
+        <div>
+            もしこのアプリがあなたの一日を少しでも明るくしたら、
+            <a href="https://buymeacoffee.com/kgninja" target="_blank">コーヒーを一杯</a> 
+            いかがでしょうか？（*任意*）
+        </div>
+        <div style="margin-top: 10px; font-size: 0.8rem;">
+            作成にご協力ありがとうございます！このアプリは社会実験として開発されています。
+        </div>
+    </div>
+
+    <script>
+        // アイデアのデータ（実際のアプリではAPIから取得したり、もっと増やすかもしれません）
+        const ideas = [
+            "同僚や友人に、具体的な感謝の言葉を一つ伝えてみよう（「今日、〇〇のおかげで助かったよ」など）",
+            "窓際の植物に水をやりながら、その成長を2分間じっくり観察してみよう",
+            "使っていない服を一着選んで、リサイクルショップに持っていくか、知り合いにあげてみよう",
+            "好きな音楽を一曲聴きながら、目を閉じてただそのメロディーに身を任せてみよう",
+            "今日食べたものの中から、一つだけ「これは美味しかった」と心の中でつぶやいてみよう",
+            "散歩中に、通常は見過ごしがちな小さな花や葉っぱを見つけて、その形をスマホで撮ってみよう",
+            "朝起きて最初に、今日楽しみにしていることを一つだけ考えてみよう（たとえ小さなことでも）",
+            "デスク周りを5分だけ片付けて、すっきりした空間で深呼吸をしてみよう",
+            "家族やパートナーに、今日あった「 pequeño pero feliz moment 」をシェアしてみよう",
+            "新しい茶葉やコーヒー豆を試してみて、その香りをじっくり味わってみよう",
+            "今日一日の中で、自分が我慢強くできた瞬間を一つ見つけて、自分を褒めてみよう",
+            "窓を開けて外の音を2分間聞いてみよう－鳥の鳴き声、風の音、遠くの車の音など",
+            "手書きで友人や家族への短いメッセージを書いてみよう－デジタルではない温かさを",
+            "今日の仕事や勉強で、一つだけ「これでよかった」と思える点を見つけてみよう",
+            "ストレッチをしながら、体のどの部分が今日特に頑張っているかを感じてみよう"
+        ];
+        
+        // 状態管理
+        let state = {
+            currentIdeaIndex: 0,
+            shownIdeas: new Set(),
+            remixMode: false,
+            originalIdea: "",
+            settings: {
+                popularityOptin: false,
+                showPopular: false,
+                showLineage: false,
+                showEmotion: true
+            }
+        };
+        
+        // DOM要素
+        const ideaDateEl = document.getElementById('idea-date');
+        const ideaTextEl = document.getElementById('idea-text');
+        const appEmotionEl = document.getElementById('app-emotion');
+        const emojiEl = document.getElementById('emoji');
+        const emotionTextEl = document.getElementById('emotion-text');
+        const shareBtn = document.getElementById('share-btn');
+        const remixBtn = document.getElementById('remix-btn');
+        const settingsBtn = document.getElementById('settings-btn');
+        const remixSectionEl = document.getElementById('remix-section');
+        const remixInputEl = document.getElementById('remix-input');
+        const shareRemixBtn = document.getElementById('share-remix-btn');
+        const cancelRemixBtn = document.getElementById('cancel-remix-btn');
+        const settingsModalEl = document.getElementById('settings-modal');
+        const closeModalEl = document.querySelector('.close-modal');
+        const closeSettingsBtn = document.getElementById('close-settings');
+        const privacyLinkEl = document.getElementById('privacy-link');
+        
+        // 設定関連のチェックボックス
+        const popularityOptinCheckbox = document.getElementById('popularity-optin');
+        const showPopularCheckbox = document.getElementById('show-popular');
+        const showLineageCheckbox = document.getElementById('show-lineage');
+        const showEmotionCheckbox = document.getElementById('show-emotion');
+        
+        // 初期化
+        function init() {
+            loadSettings();
+            showTodayIdea();
+            updateAppEmotion();
+            setupEventListeners();
+            
+            // プライバシーポリシーリンク
+            privacyLinkEl.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert(`プライバシーポリシー（簡易版）:
+                
+1. データ収集：オプトインした機能以外では個人データは一切収集しません
+2. 共有機能：Twitter/Xへの投稿はすべてあなたの明確なアクションが必要です
+3. データ利用：収集した匿名データはサービス改善のみに使用し、第三者に提供しません
+4. データ保存：個人を特定できる情報は一切保存しません
+    
+詳細については開発者にお問い合わせください。`);
+            });
+        }
+        
+        // 設定の読み込み
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('hokkoriSettings');
+            if (savedSettings) {
+                try {
+                    state.settings = JSON.parse(savedSettings);
+                    // チェックボックスの状態を反映
+                    popularityOptinCheckbox.checked = state.settings.popularityOptin;
+                    showPopularCheckbox.checked = state.settings.showPopular;
+                    showLineageCheckbox.checked = state.settings.showLineage;
+                    showEmotionCheckbox.checked = state.settings.showEmotion;
+                } catch (e) {
+                    console.error('設定の読み込みに失敗しました:', e);
+                }
+            }
+        }
+        
+        // 設定の保存
+        function saveSettings() {
+            localStorage.setItem('hokkoriSettings', JSON.stringify(state.settings));
+        }
+        
+        // 今日のアイデアを表示
+        function showTodayIdea() {
+            // 実際のアプリでは日付ベースでアイデアを選択するかもしれません
+            // ここではシンプルに前日からの連続表示を行う
+            const today = new Date();
+            const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (24 * 60 * 60 * 1000));
+            state.currentIdeaIndex = dayOfYear % ideas.length;
+            
+            ideaDateEl.textContent = `${today.getMonth() + 1}月${today.getDate()}日のほっこりアイデア`;
+            ideaTextEl.textContent = ideas[state.currentIdeaIndex];
+            state.originalIdea = ideas[state.currentIdeaIndex];
+            
+            // リミックスモードをリセット
+            state.remixMode = false;
+            remixSectionEl.style.display = 'none';
+            remixInputEl.value = '';
+        }
+        
+        // アプリの「感情」を更新（セッションベース、完全にフィクション）
+        function updateAppEmotion() {
+            if (!state.settings.showEmotion) {
+                appEmotionEl.style.display = 'none';
+                return;
+            }
+            
+            appEmotionEl.style.display = 'block';
+            
+            // シンプルなロジック：今日はまだシェアしていない場合は控えめなメッセージ
+            // 実際の実装では、今日のセッションでのシェア数をトラッキングするかもしれません
+            // ここではデモとして、時間ベースの変化をつける
+            const hour = new Date().getHours();
+            
+            if (hour < 12) {
+                emojiEl.textContent = '☀️';
+                emotionTextEl.textContent = 'おはよう！今日も一日がんばろうね。';
+            } else if (hour < 18) {
+                emojiEl.textContent = '🌤️';
+                emotionTextEl.textContent = 'お昼ごはんは何食べた？ほっこりした？';
+            } else {
+                emojiEl.textContent = '🌙';
+                emotionTextEl.textContent = '今日もお疲れ様。ゆっくり休んでね。';
+            }
+        }
+        
+        // イベントリスナーの設定
+        function setupEventListeners() {
+            // ほっこりをシェアボタン
+            shareBtn.addEventListener('click', async () => {
+                if (state.remixMode) return; // リミックスモードでは通常シェアボタンは無効
+                
+                try {
+                    const text = `今日のほっこりアイデア：${state.originalIdea}\n\nこれで今日が少しでも明るくなったらシェアしてね！ #今日のほっこり https://example.com`;
+                    
+                    // Web Share APIが利用可能かチェック
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: '今日のほっこりアイデア',
+                            text: text,
+                            url: 'https://example.com'
+                        });
+                    } else {
+                        // フォールバック：Twitterの意図URLを使用
+                        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                        window.open(tweetUrl, '_blank', 'width=600,height=400');
+                    }
+                    
+                    // シェア後に感情を更新（フィクション）
+                    updateAppEmotionAfterShare();
+                    
+                    // オプトインしている場合は匿名データを記録（実際の実装ではここでサーバーに送信など）
+                    if (state.settings.popularityOptin) {
+                        recordAnonymousShare('original');
+                    }
+                    
+                    showShareConfirmation();
+                } catch (error) {
+                    console.error('シェアに失敗しました:', error);
+                    alert('シェアに失敗しました。もう一度お試しください。');
+                }
+            });
+            
+            // アイデアをアレンジボタン
+            remixBtn.addEventListener('click', () => {
+                state.remixMode = true;
+                remixSectionEl.style.display = 'block';
+                remixInputEl.value = state.originalIdea; // 元のアイデアをベースにする
+                remixInputEl.focus();
+                
+                // ボタンの状態を更新
+                remixBtn.disabled = true;
+                remixBtn.textContent = 'アレンジ中...';
+            });
+            
+            // アレンジバージョンをシェアボタン
+            shareRemixBtn.addEventListener('click', async () => {
+                const remixedIdea = remixInputEl.value.trim();
+                
+                if (!remixedIdea) {
+                    alert('アイデアを入力してください。');
+                    return;
+                }
+                
+                // Allow sharing exact input as-is without confirmation
+                // Only check for empty input
+                
+                try {
+                    const text = `私のほっこりアイデアアレンジ：${remixedIdea}\n\n元のアイデア：「${state.originalIdea}」\n\nよかったらみんなもアレンジしてシェアしてね！ #ほっこりアレンジ https://example.com`;
+                    
+                    // Web Share APIが利用可能かチェック
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: '私のほっこりアイデアアレンジ',
+                            text: text,
+                            url: 'https://example.com'
+                        });
+                    } else {
+                        // フォールバック：Twitterの意図URLを使用
+                        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                        window.open(tweetUrl, '_blank', 'width=600,height=400');
+                    }
+                    
+                    // シェア後に感情を更新（フィクション）
+                    updateAppEmotionAfterShare();
+                    
+                    // オプトインしている場合は匿名データを記録
+                    if (state.settings.popularityOptin) {
+                        recordAnonymousShare('remix', remixedIdea);
+                    }
+                    
+                    showShareConfirmation();
+                    
+                    // リミックスモードをリセット
+                    resetRemixMode();
+                } catch (error) {
+                    console.error('シェアに失敗しました:', error);
+                    alert('シェアに失敗しました。もう一度お試しください。');
+                }
+            });
+            
+            // アレンジキャンセルボタン
+            cancelRemixBtn.addEventListener('click', () => {
+                resetRemixMode();
+            });
+            
+            // 設定ボタン
+            settingsBtn.addEventListener('click', () => {
+                settingsModalEl.style.display = 'block';
+            });
+            
+            // 設定モーダルを閉じる
+            closeModalEl.addEventListener('click', () => {
+                settingsModalEl.style.display = 'none';
+            });
+            
+            closeSettingsBtn.addEventListener('click', () => {
+                // 設定を保存
+                state.settings.popularityOptin = popularityOptinCheckbox.checked;
+                state.settings.showPopular = showPopularCheckbox.checked;
+                state.settings.showLineage = showLineageCheckbox.checked;
+                state.settings.showEmotion = showEmotionCheckbox.checked;
+                
+                saveSettings();
+                
+                // 感情表示の更新
+                updateAppEmotion();
+                
+                settingsModalEl.style.display = 'none';
+                
+                // 設定変更を反映
+                if (state.settings.showEmotion) {
+                    appEmotionEl.style.display = 'block';
+                } else {
+                    appEmotionEl.style.display = 'none';
+                }
+            });
+            
+            // モーダル外をクリックしても閉じる
+            window.addEventListener('click', (e) => {
+                if (e.target === settingsModalEl) {
+                    settingsModalEl.style.display = 'none';
+                }
+            });
+        }
+        
+        // リミックスモードをリセット
+        function resetRemixMode() {
+            state.remixMode = false;
+            remixSectionEl.style.display = 'none';
+            remixInputEl.value = '';
+            remixBtn.disabled = false;
+            remixBtn.textContent = '🔄 アイデアをアレンジ';
+        }
+        
+        // シェア後に感情を更新（フィクション）
+        function updateAppEmotionAfterShare() {
+            if (!state.settings.showEmotion) return;
+            
+            // 今日はシェアしたよ！というメッセージに変更
+            emojiEl.textContent = '💖';
+            emotionTextEl.textContent = 'シェアありがとう！今日も誰かをほっこりさせられたね☀️';
+            
+            // 一定時間後に通常のメッセージに戻す
+            setTimeout(() => {
+                updateAppEmotion();
+            }, 5000); // 5秒後に戻す
+        }
+        
+        // 匿名共有を記録（実際の実装ではここでサーバーにデータを送信するかもしれません）
+        function recordAnonymousShare(type, remixedIdea = '') {
+            // ここでは単純にコンソールに出力するだけ（実際のアプリでは適切なバックエンドに送信）
+            console.log(`匿名共有記録: ${type}idea`, {
+                timestamp: new Date().toISOString(),
+                ideaType: type,
+                // 実際のアプリではここでハッシュ化されたアイデアIDなどを記録するかもしれません
+                // 個人を特定できる情報は一切含めません
+            });
+            
+            // デモとして、ローカルストレージに簡単なカウントを保存（実際のアプリではこれをサーバーで集約）
+            const shareCountKey = `hokkori_share_count_${state.currentIdeaIndex}`;
+            let count = parseInt(localStorage.getItem(shareCountKey) || '0');
+            count++;
+            localStorage.setItem(shareCountKey, count.toString());
+        }
+        
+        // シェア確認メッセージを表示
+        function showShareConfirmation() {
+            // 簡易的な確認メッセージ
+            const confirmation = document.createElement('div');
+            confirmation.style.position = 'fixed';
+            confirmation.style.bottom = '20px';
+            confirmation.style.left = '50%';
+            confirmation.style.transform = 'translateX(-50%)';
+            confirmation.style.background = 'rgba(46, 204, 113, 0.9)';
+            confirmation.style.color = 'white';
+            confirmation.style.padding = '12px 24px';
+            confirmation.style.borderRadius = '30px';
+            confirmation.style.fontSize = '1rem';
+            confirmation.style.zIndex = '1000';
+            confirmation.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+            confirmation.textContent = 'シェアしました！ありがとう！';
+            
+            document.body.appendChild(confirmation);
+            
+            // 3秒後にフェードアウト
+            setTimeout(() => {
+                confirmation.style.opacity = '0';
+                confirmation.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    document.body.removeChild(confirmation);
+                }, 500);
+            }, 3000);
+        }
+        
+        // アプリ起動時に初期化
+        init();
+        
+        // ページが表示されるたびに日付をチェックしてアイデアを更新するかもしれない
+        // （実際のアプリではこれは必要かもしれませんが、ここではシンプルに日付変更時のみ更新）
+        let lastCheckedDate = new Date().toDateString();
+        setInterval(() => {
+            const todayDate = new Date().toDateString();
+            if (todayDate !== lastCheckedDate) {
+                lastCheckedDate = todayDate;
+                showTodayIdea();
+                updateAppEmotion();
+            }
+        }, 60000); // 1分ごとにチェック
+    </script>
+</body>
+</html>
